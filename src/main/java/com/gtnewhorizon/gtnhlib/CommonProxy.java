@@ -2,6 +2,7 @@ package com.gtnewhorizon.gtnhlib;
 
 import static com.gtnewhorizon.gtnhlib.core.GTNHLibCore.isObf;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.server.MinecraftServer;
@@ -12,6 +13,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import com.gtnewhorizon.gtnhlib.blockstate.command.BlockStateCommand;
 import com.gtnewhorizon.gtnhlib.blockstate.init.BlockPropertyInit;
 import com.gtnewhorizon.gtnhlib.brigadier.BrigadierApi;
+import com.gtnewhorizon.gtnhlib.brigadier.BrigadierCommandWrapper;
 import com.gtnewhorizon.gtnhlib.chat.ChatComponentCustomRegistry;
 import com.gtnewhorizon.gtnhlib.chat.customcomponents.ChatComponentEnergy;
 import com.gtnewhorizon.gtnhlib.chat.customcomponents.ChatComponentFluid;
@@ -40,6 +42,7 @@ import com.gtnewhorizon.gtnhlib.test.block.BlockWeightedRngTest;
 import com.gtnewhorizon.gtnhlib.test.item.TestItem;
 import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatConfig;
 import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil;
+import com.mojang.brigadier.tree.CommandNode;
 
 import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -126,6 +129,10 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new BlockStateCommand());
         event.registerServerCommand(new TitleCommand());
+
+        for (CommandNode<ICommandSender> node : BrigadierApi.getCommandDispatcher().getRoot().getChildren()) {
+            event.registerServerCommand(new BrigadierCommandWrapper(node.getName()));
+        }
     }
 
     public void serverStarted(FMLServerStartedEvent event) {}
