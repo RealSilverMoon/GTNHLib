@@ -130,8 +130,20 @@ public class CommonProxy {
         event.registerServerCommand(new BlockStateCommand());
         event.registerServerCommand(new TitleCommand());
 
-        for (CommandNode<ICommandSender> node : BrigadierApi.getCommandDispatcher().getRoot().getChildren()) {
-            event.registerServerCommand(new BrigadierCommandWrapper(node.getName()));
+        if (isThermosServer()) {
+            for (CommandNode<ICommandSender> node : BrigadierApi.getCommandDispatcher().getRoot().getChildren()) {
+                event.registerServerCommand(new BrigadierCommandWrapper(node.getName()));
+            }
+        }
+    }
+
+    public static boolean isThermosServer() {
+        try {
+            Class.forName("thermos.ThermosRemapper");
+            GTNHLib.LOG.warn("Thermos detected, applying command wrapper");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
         }
     }
 
