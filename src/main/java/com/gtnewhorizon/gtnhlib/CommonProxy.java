@@ -140,7 +140,7 @@ public class CommonProxy {
     public static boolean isThermosServer() {
         try {
             Class.forName("thermos.ThermosRemapper");
-            GTNHLib.LOG.warn("Thermos detected, applying command wrapper");
+            GTNHLib.LOG.info("Thermos detected, applying command wrapper");
             return true;
         } catch (ClassNotFoundException e) {
             return false;
