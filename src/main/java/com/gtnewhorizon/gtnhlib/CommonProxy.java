@@ -137,9 +137,14 @@ public class CommonProxy {
         }
     }
 
+    /**
+     * Checks if the current environment is a Thermos server or its fork like Crucible.
+     *
+     * @return true if the server core is detected, false otherwise.
+     */
     public static boolean isThermosServer() {
         try {
-            Class.forName("thermos.ThermosRemapper");
+            Class.forName("thermos.ThermosRemapper", false, CommonProxy.class.getClassLoader());
             GTNHLib.LOG.info("Thermos detected, applying command wrapper");
             return true;
         } catch (ClassNotFoundException e) {
